@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+
+/* Definition of themes, shadows, colors, background, border-radius, etc. here. */
+@theme {
+  /* 
+  --background-color: #f2f4f7;;
+  --hard-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); 
+  */
+
+}
+
+
+/* Define the default styling of HTML elements. This acts as the base styling for the elements. Use only element in this section */
+@layer base {
+
+  html,
+  body {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+
+    /* Use available Tailwind Utility classes using @apply */
+    /* @apply h-screen w-screen overflow-x-hidden bg-[var(--background-color)]; */
+  
+  }
+
+
+}
+
+/* Define your custom classes when you want to use the same styling in multiple elements. You can write pure CSS or @apply directives to use Tailwind CSS utility class */
+@layer component {
+
+/*
+   .active {
+    @apply text-blue-600 scale-105 relative;
+  }
+
+  .active-user {
+    display: inline-block;
+  } 
+*/
+
+/*   
+  .hide-scrollbar {
+    scrollbar-width: none;
+  } 
+*/
+  
+
+
+}
+
+
+
+/* Here, you create your own utility classes that tailwind doesn't provide by default. */
+@layer utilities {
+  /* .hover-scale {
+    @apply hover:scale-105 ease-in duration-200 active:scale-97;
+  }
+
+  .hover-scale-sm {
+    @apply hover:scale-101 duration-200 ease-in active:scale-99;
+  } */
+
+
+
+
+
+  
+
+}
