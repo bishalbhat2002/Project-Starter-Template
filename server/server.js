@@ -1,0 +1,88 @@
+import express from "express"
+import cookieParser from "cookie-parser"
+import cors from "cors"
+import { connectDB } from "./config/connect.db.js"
+import { GlobalErrorHandler } from "./middlewares/globalError.middleware.js"
+import path from "path"
+import { fileURLToPath } from "url"
+
+
+/**
+ * Import Routes Here...
+ * Example:
+ * import userRoute from "./routes/user.route.js"
+ */
+
+
+// Create __filename and __dirname in ES module... We need this when we use type="module" way of importing...
+ const __filename = fileURLToPath(import.meta.url)
+ const __dirname = path.dirname(__filename);
+ const app = express()                                     // Create Express App
+
+
+/**
+ * CORS configuration:
+ * Cors stands for Cross Origin Resource Sharing- It allwos frontend 
+ * (running on different origin) to access backend APIs.
+ * 
+ * Example:
+ * Frontend: http://localhost:5173
+ * Backend: http://localhost:3000
+ * 
+ * Without CORS setup -> Browser will block the request.
+ * Note: CORS is browser feature, the CORS library in backend protects client in the fronent.
+ * This library sets the response header which determines whether the client JS can read the 
+ * response or not. 
+ * 
+ * NOTE:
+ * app.use(cors()) -> it is good for learning, but unsafe for production because 
+ * it allows all orgins to access the APIs.
+ * 
+*/
+
+app.use(cors({
+     origin:[process.env.CLIENT_URL, ],                     // This allows only this origin from frontend to access the Backend APIs.
+     methods: ["GET", "POST", "PUT", "DELETE"],             // These are allowed HTTP methods
+     allowedHeaders: ["content-Type", "authorization"],     // Allowed headers
+     credentials:true,                                      // This allows cookies -> for auth headers 
+}))
+
+app.use(express.json())                                     // Middleware to parse incoming JSON Request from Client (API requests)
+app.use(cookieParser())                                     // Middleware to parse Cookies sent by client in request headers
+app.use(express.urlencoded({extended:true}))                // Middleware to parse URL-encoded form data (send using GET or POST) (used when handling HTML form submissions)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));           // Middleware to serve upload folder.
+
+
+/**
+ * Note: 
+ * extended:true -> Parses URL-encoded form data and allows nested objects (recommended)
+ * extended:false -> Parses URL-encoded form data and but allows only simple key-value pairs (not-recommended)
+ * 
+ */
+
+
+/**
+ * Mount Routes Here...
+ * Example:
+ * app.use("/user", userRoute)
+ * app.use("/post", postRoute)
+ * 
+ */
+
+app.get("/", (req, res)=>{
+     res.send("Hello world..")
+})
+
+
+// GLOBAL ERROR HADNLING Middleware at the end
+app.use(GlobalErrorHandler)
+
+
+
+const PORT = process.env.SERVER_PORT || 5000
+
+// Instead of using app -> for Real time app, we use "server". 
+app.listen(PORT, ()=>{
+     console.log("Server Listening on PORT: ", PORT)
+     connectDB()
+})
